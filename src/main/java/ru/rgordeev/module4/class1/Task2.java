@@ -1,4 +1,4 @@
-package ru.rgordeev.module4;
+package ru.rgordeev.module4.class1;
 
 import java.util.Scanner;
 
