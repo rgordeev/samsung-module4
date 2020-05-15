@@ -1,0 +1,196 @@
+/*
+      [some data (e.g. file 100Gb] -> hash -> number (32, 64, 16)
+
+      hash("1234567890") -> 131312312
+      hash("2234567890") -> 343242342
+
+
+      [0                           Int.Max / 3      3123  2332  21312            Int.Max * 2 / 3                                    Int.MAX]
+
+A {
+    a = 10,
+    b = 15
+
+}
+
+hash(A) = 31
+
+B {
+    a = 10,
+    b = 20
+}
+
+hash(B) = 31
+ */
+/*
+        Map<Integer, String> -> [ (key, value), .... ]
+*/
+/*
+          0   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15
+        [ [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [] ]
+
+ Map<String, String> map = new HashMap<>();
+
+ table Entry[]
+ loadFactor
+ threashoald = size * loadFactor
+ size
+
+ table = new Entry[size]
+
+           0   1   2   3   4   5   6   7   8   9   10   11      12      13      14      15
+        [ [], [], [], [], [], [], [], [], [], [],   [], [],     [],     [],     [],     [] ]
+                                                                                        Entry
+                                                                                        hash 15
+                                                                                        key  15
+                                                                                        next null
+                                                                                        value "aaaaaa"
+
+map.put(15, "aaaaaa");
+
+hashCode(15) -> 15
+h = 15 >>> 16
+
+0000 0000 0000 1111
+
+h == 15 & (size - 1 == 15)
+
+0000 0000 0000 1111
+0000 0000 0000 1111
+-------------------
+0000 0000 0000 1111
+
+
+if (entry.hash == hash && (entry.key == key || key.equals(entry.key))
+{
+    String old = entry.value;
+    entry.value = value;
+    return old;
+}
+
+
+
+           0   1   2   3   4   5   6   7   8   9       10   11      12      13      14      15
+        [ [], [], [], [], [], [], [], [], [], [ ],      [], [],     [],     [],     [],     [] ]
+                                              Entry                                     Entry
+                                              hash 9                                    hash 15
+                                              key  9                                    key  15
+                                              next null                                 next {Entry(15, 13123,"bbbbb", null}
+                                              value "32131231"                          value "fdsfdsfs"
+
+                                                                                        Entry
+                                                                                        hash 15
+                                                                                        key  13123
+                                                                                        next null
+                                                                                        value "bbbbbbb"
+
+
+
+addEntry(int hash, Integer key, String value, int index) {
+    Entry<Integer, String> e = table[index];
+    table[index] = new Entry(15, 15, "aaaaaa", Entry(15, 13123,"bbbbb", null))
+}
+
+map.put(15, "fdsfdsfs");
+
+map.put(null, "34534gfdgfdhfghf");
+map.put(String, "34534gfdgfdhfghf");
+
+O {
+    int hashCode() {
+        return 31;
+    }
+}
+
+
+map.get(15)
+O(n)
+
+           0   1   2   3   4   5   6   7   8   9       10   11      12      13      14      15
+        [ [], [], [], [], [], [], [], [], [], [ ],      [], [],     [],     [],     [],     [] ]
+                                              Entry                                     Entry
+                                              hash 9                                    hash 15
+                                              key  9                                    key  15
+                                              next null                                 next {Entry(15, 13123,"bbbbb", null}
+                                              value "32131231"                          value "fdsfdsfs"
+
+                                                                                        Entry
+                                                                                        hash 15
+                                                                                        key  13123
+                                                                                        next null
+                                                                                        value "bbbbbbb"
+
+
+
+
+
+
+set = new HashSet<String>()
+
+set.add("dsadasdas");
+1. hashCode == 1
+2  h = hashCode >>> 20
+3  index = h & (size - 1)
+4  table[index]
+
+           0   1   2   3   4   5   6   7   8   9       10   11      12      13      14      15
+        [ [], [], [], [], [], [], [], [], [], [ ],      [], [],     [],     [],     [],     [] ]
+                                              Entry                                     Entry
+                                              hash 9                                    hash 15
+                                              key "ssdfsdf"                             key "sdsadsad"
+                                              next null                                 next {Entry(15, 13123,null, null}
+                                              value null                                value null
+
+                                                                                        Entry
+                                                                                        hash 15
+                                                                                        key  "dsadsadsad"
+                                                                                        next null
+                                                                                        value null
+
+
+0000
+0001
+
+0101
+0001
+
+
+           0                                            1
+        [ [],                                           [] ]
+          Entry                                         Entry
+          hash 0                                        hash 1
+          key "sdsadsad"                                key "sdsadsad"
+          next {Entry(15, 13123,null, null}             next {Entry(15, 13123,null, null}
+          value null                                    value null
+
+          Entry                                         Entry
+          hash 2                                        hash 3
+          key "sdsadsad"                                key "sdsadsad"
+          next {Entry(15, 13123,null, null}             next {Entry(15, 13123,null, null}
+          value null                                    value null
+
+          Entry                                         Entry
+          hash 4                                        hash 5
+          key "sdsadsad"                                key "sdsadsad"
+          next {Entry(15, 13123,null, null}             next {Entry(15, 13123,null, null}
+          value null                                    value null
+
+0101
+0011
+
+           0                                            1                                       2                                       3
+        [ []                                           []                                       []                                    []]
+          Entry                                       Entry                                    Entry                                  Entry
+          hash 0                                      hash 1                                   hash 2                                 hash 3
+          key "sdsadsad"                              key "sdsadsad"                           key "sdsadsad"                         key "sdsadsad"
+          next {Entry(15, 13123,null, null}           next {Entry(15, 13123,null, null}        next {Entry(15, 13123,null, null}      next {Entry(15, 13123,null, null}
+          value null                                  value null                               value null                             value null
+
+          Entry                                       Entry
+          hash 4                                      hash 5
+          key "sdsadsad"                              key "sdsadsad"
+          next {Entry(15, 13123,null, null}           next {Entry(15, 13123,null, null}
+          value null                                  value null
+
+ */
+//        System.out.println(new String("0").hashCode());
